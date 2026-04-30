@@ -1,0 +1,13 @@
+<svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="160" height="160" rx="18" fill="#9B59B6"/>
+  <!-- Pole -->
+  <rect x="42" y="28" width="6" height="106" rx="3" fill="white"/>
+  <!-- Flag body -->
+  <rect x="48" y="28" width="72" height="52" rx="4" fill="white"/>
+  <!-- Flag stripes -->
+  <rect x="48" y="28" width="72" height="17" rx="4" fill="#E74C3C"/>
+  <rect x="48" y="45" width="72" height="17" fill="#F1C40F"/>
+  <rect x="48" y="62" width="72" height="18" rx="4" fill="#2ECC71"/>
+  <!-- Star on flag -->
+  <polygon points="84,38 86.5,45 94,45 88,49.5 90.5,57 84,52.5 77.5,57 80,49.5 74,45 81.5,45" fill="white"/>
+</svg>

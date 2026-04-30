@@ -1,0 +1,979 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+
+    <style>
+        *,
+        *::before,
+        *::after {
+
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+            overflow-y: scroll;
+        }
+
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            scrollbar-width: none;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+
+        }
+
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-webkit-credentials-auto-fill-button {
+            display: none;
+        }
+
+        :root {
+
+            --red: #A63446;
+            --alabaster-grey: #cfdbd5ff;
+            --soft-linen: #e8eddfff;
+            --tuscan-sun: #f5cb5cff;
+            --carbon-black: #242423ff;
+            --darkgrey: rgb(49, 49, 52);
+            --darkgreylight: #4b4b51;
+            --light-grey: rgb(224, 226, 233);
+            --accent: #5d9cff;
+            --accent2: #ff6b6b;
+            --accent3: #54d9a8;
+            --text: #f0f4ff;
+            --muted: #7a87a0;
+            --correct: #54d9a8;
+            --wrong: #ff6b6b;
+        }
+
+        .screen {
+            display: none;
+            max-width: 60%;
+            min-height: 100vh;
+            margin: auto;
+            background-color: transparent;
+            animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+
+        }
+
+
+
+        .screen.active {
+            display: flex;
+            animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeUp {
+            0% {
+                opacity: 0.00;
+                transform: translateY(24px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        #header {
+            width: 100%;
+            height: 60px;
+
+            display: flex;
+            align-items: center;
+            padding: 10px 15px 10px 15px;
+            position: fixed;
+            background-color: var(--muted);
+            z-index: 999;
+
+        }
+
+        #home-screen {
+            flex-direction: column;
+            /* margin: 0px 100px; */
+            overflow: hidden;
+
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .btn-container-home {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 100px;
+        }
+
+        .btn {
+            width: 200px;
+            height: 30px;
+            background-color: var(--muted);
+            border: none;
+            outline: none;
+            color: white;
+            border-radius: 0px;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+
+            background-color: #9ba7bc;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+            transition: transform 0.3s ease-out;
+        }
+
+
+        .back {
+            width: 40px;
+            height: 40px;
+            background-color: var(--muted);
+
+            outline: none;
+            color: white;
+            border-radius: 0px;
+            font-weight: 600;
+
+
+
+        }
+
+        /* ══════════════════ Category ════════════════════════════════════════════════════════════════════════════════════════════  */
+
+        #category-screen {
+            flex-direction: column;
+            /* margin: 0px 300px; */
+            overflow: hidden;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding-top: 30px;
+        }
+
+        #category-header {
+            width: 100%;
+            height: 170px;
+
+            display: flex;
+            align-items: end;
+            gap: 30px;
+            position: absolute;
+            top: 0px;
+            padding-bottom: 30px;
+            background-color: white;
+
+        }
+
+
+
+        .wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
+            transform: scale(1);
+            transition: transform 0.5s ease;
+            gap: 20px;
+
+
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            color: white;
+            z-index: 4;
+
+
+
+        }
+
+
+
+        #category-searchBar {
+            width: 260px;
+            height: 35px;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            background-color: var(--muted);
+            padding-left: 35px;
+            color: white;
+            transform: scale(1);
+            transition: transform 0.5s ease;
+
+        }
+
+        #category-searchBar::placeholder {
+            color: white;
+            opacity: 0.7;
+
+        }
+
+        /* .wrapper:focus-within {
+
+            transform: translateX(-250px) translateY(200px) scale(3);
+            transition: transform 0.5s ease;
+        } */
+
+
+
+        #category-grid {
+            display: flex;
+            flex-direction: column;
+
+            /* display: grid;
+            grid-template-columns: repeat(1,100%);
+            grid-template-rows: repeat(auto,auto); */
+
+            width: 100%;
+            /* height: 60vh; */
+            align-items: center;
+            gap: 30px;
+            padding: 160px 0 30px 0;
+
+            overflow-y: auto;
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        #category-grid::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari */
+        }
+
+        .category-card-btn {
+            width: 90%;
+            height: auto;
+            background-color: white;
+            border-radius: 0px;
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border: solid 1px var(--muted);
+            /* box-shadow: 0 4px 6px rgb(159, 159, 159); */
+            gap: 20px;
+            /* color: var(--muted); */
+        }
+
+        .category-card-btn:hover {
+
+            border-color: #b1bbcc;
+            color: #b1bbcc;
+        }
+
+
+        /* ══════════════════ Quiz ════════════════════════════════════════════════════════════════════════════════════════════  */
+
+
+        #quiz-screen {
+            flex-direction: column;
+            /* margin: 0px 300px; */
+            overflow: hidden;
+
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+
+        }
+
+        .quiz-header {
+
+            width: 100%;
+            height: 60px;
+
+            display: flex;
+            align-items: center;
+            gap: 17px;
+
+        }
+
+        .quiz-category-tag {
+            width: 70%;
+            height: auto;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            flex: 1;
+
+        }
+
+        .timer-container {
+            width: 50px;
+            height: 50px;
+            position: relative;
+        }
+
+        .timer-svg {
+            transform: rotate(-90deg);
+            width: 50px;
+            height: 50px;
+        }
+
+        .timer-track {
+            fill: none;
+            stroke: #e0e0e0;
+            stroke-width: 4;
+        }
+
+        .timer-progress {
+            fill: none;
+            stroke: #65ba6d;
+            stroke-width: 4;
+            stroke-linecap: square;
+            stroke-dasharray: 126;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear, stroke 0.3s;
+        }
+
+        .timer-progress.warning {
+            stroke: #ff9800;
+        }
+
+        .timer-progress.danger {
+            stroke: #f44336;
+        }
+
+        .timer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .question-card {
+            width: 100%;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 30px;
+            margin-top: 30px;
+            gap: 20px;
+            border-radius: 5px;
+
+            overflow: hidden;
+            animation: sideFade 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+
+
+        }
+
+        .q-text {
+            max-height: 100px;
+            overflow: hidden;
+            text-align: left;
+            margin-bottom: 30px;
+            word-break: break-word;
+            /* ← forces long unbreakable text to wrap down */
+
+        }
+
+        @keyframes sideFade {
+            0% {
+                opacity: 0.00;
+                transform: translateX(24px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+        }
+
+        .opt-grid {
+            width: 100%;
+            height: fit-content;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(4, auto);
+            gap: 10px;
+        }
+
+        /* falls back to 1 column on small screens */
+        @media (max-width: 480px) {
+            .opt-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .opt-btn {
+            width: 100%;
+            max-width: 100%;
+            background-color: white;
+            border: solid 1px var(--muted);
+            color: black
+        }
+
+        .opt-btn:hover {
+            border-color: #9ba7bc;
+            background-color: white;
+        }
+
+        /* ══════════════════ Result ════════════════════════════════════════════════════════════════════════════════════════════  */
+
+        #result-screen {
+            flex-direction: column;
+            overflow: hidden;
+
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            gap: 24px;
+
+        }
+
+        .result-stat-row {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 32px;
+        }
+
+        .result-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .result-stat-val {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        /* score in the middle is bigger */
+        .result-stat.center .result-stat-val {
+            font-size: 3.5rem;
+        }
+
+        .result-stat-key {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .result-secondary {
+            display: flex;
+            gap: 24px;
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* ══════════════════ Admin ════════════════════════════════════════════════════════════════════════════════════════════  */
+        #open-modal-btn {
+            width: 100px;
+            height: 30px;
+            background-color: white;
+            border: none;
+            outline: none;
+            color: var(--muted);
+            border-radius: 0px;
+            font-weight: 600;
+            margin-left: auto;
+
+        }
+
+        #admin-modal {
+            width: 300px;
+            height: fit-content;
+
+            padding: 20px;
+            margin: auto;
+            background-color: white;
+            border: solid 1px var(--muted);
+            gap: 30px;
+        }
+
+        #admin-modal[open] {
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+        }
+
+        #admin-modal-close-btn {
+            width: 20px;
+            height: 20px;
+            outline: none;
+            border: none;
+            background-color: transparent;
+            margin-left: auto;
+
+
+        }
+
+        #admin-modal-back-btn:hover {
+
+            background-color: rgba(255, 255, 255, 0.322);
+
+        }
+
+        .input-field {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            font-size: small;
+            gap: 5px;
+            position: relative;
+        }
+
+
+        #admin-pass-input {
+
+            width: 100%;
+            height: 25px;
+            border: solid 1px var(--muted);
+            outline: none;
+            padding-left: 10px;
+
+        }
+
+
+        #admin-pass-err {
+            display: none;
+            color: red;
+            background-color: white;
+            padding: 0px;
+            position: absolute;
+            top: 48px;
+            font-size: 10px;
+
+        }
+
+        #admin-pass-err.active {
+            display: flex;
+
+        }
+
+        #toggle-btn {
+            position: absolute;
+            top: 24px;
+            right: -25px;
+            border: none;
+            background-color: transparent;
+        }
+
+        #toggle-btn * {
+            pointer-events: none;
+        }
+
+        .eye-open {
+            color: var(--muted);
+        }
+
+        .eye-close {
+            color: #9da9bf;
+
+        }
+
+        #admin-login-btn {
+            width: 30%;
+            height: 30px;
+            border: none;
+            background-color: var(--muted);
+            color: white;
+        }
+
+
+        #admin-screen {
+            flex-direction: column;
+            /* justify-content: center; */
+            padding-top: 100px;
+            position: relative;
+            overflow: hidden;
+            gap: 20px;
+        }
+
+        #admin-header {
+            display: flex;
+            align-items: center;
+
+
+        }
+
+        .logout-btn {
+            width: 100px;
+            height: 30px;
+            margin-left: auto
+        }
+
+        #admin-nav {
+            width: fit-content;
+
+            display: flex;
+            gap: 20px;
+            padding: 10px;
+            border: solid 1px var(--muted);
+        }
+
+        .admin-tab {
+            width: 120px;
+            height: 30px;
+
+            border: solid 1px var(--muted);
+            background-color: white;
+
+        }
+
+        .admin-tab.active {
+            background-color: var(--muted);
+            border: none;
+        }
+
+        .tab-panel {
+            display: none;
+
+        }
+
+        .tab-panel.active {
+            display: flex;
+        }
+
+        #question-tab {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .filter {
+            height: 30px;
+
+            outline: none;
+            border: none;
+            background-color: var(--darkgreylight);
+            color: white;
+            width: 120px;
+            min-width: 90px;
+            border-radius: 3px;
+            font-size: 12px;
+            padding: 0 10px;
+        }
+
+        #question-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            color: rgb(196, 196, 196);
+            table-layout: fixed;
+        }
+
+        #question-table thead tr {
+            background: var(--darkgrey);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        #question-table th {
+            padding: 8px 12px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 500;
+            color: white;
+            border-bottom: 1px solid #8b8b8b;
+            border-right: 1px solid #8b8b8b;
+        }
+
+        #question-table th:last-child {
+            border-right: none;
+        }
+
+        #question-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #8b8b8b;
+            border-right: 1px solid #8b8b8b;
+            background: var(--darkgreylight);
+            vertical-align: top;
+        }
+
+        #question-table td:last-child {
+            border-right: none;
+        }
+
+        #question-table colgroup col:nth-child(1) {
+            width: 50px;
+        }
+
+        #question-table colgroup col:nth-child(2) {
+            width: 100px;
+        }
+
+        #question-table colgroup col:nth-child(3) {
+            width: 100px;
+        }
+
+        #question-table colgroup col:nth-child(4) {
+            width: 80px;
+        }
+
+
+
+        .badge {
+            border-radius: 20px;
+            /* border: solid 1px white; */
+            padding: 0px 10px 3px 10px;
+            background-color: #57575b;
+
+        }
+
+
+        .cat-math {
+            background-color: rgb(196, 218, 187);
+            color: #284e22
+        }
+
+        .cat-science {
+            background-color: rgb(218, 204, 188);
+            color: #592c1c;
+        }
+
+
+        .diff-easy {
+            background-color: rgb(201, 222, 192);
+            color: #3d6438
+        }
+
+        .diff-intermediate {
+            background-color: rgb(216, 211, 192);
+            color: #543a21
+        }
+
+        .diff-hard {
+            background-color: rgb(220, 197, 198);
+            color: #533030;
+        }
+
+
+        .opt-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+        }
+
+        .opt {
+            display: flex;
+            gap: 10px;
+            margin-left: 5px;
+        }
+
+        .opt.correct {
+            color: rgb(151, 247, 151);
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="header"><button id="open-modal-btn">admin</button></div>
+
+    <!-- ════════════════════════════════════════════════════════
+     SCREEN: HOME
+     ════════════════════════════════════════════════════════ -->
+    <div class="screen active" id="home-screen">
+        <h2>Akoy alipin mo kahit hindi batid</h2>
+        <div class="btn-container-home">
+            <button class="btn play">play</button>
+            <button class="btn">hi po</button>
+        </div>
+    </div>
+    <!-- ════════════════════════════════════════════════════════
+     SCREEN: CATEGORY 
+     ════════════════════════════════════════════════════════ -->
+    <div class="screen " id="category-screen">
+        <div id="category-header">
+            <button class="btn back">&lt;</button>
+            <h1>Categories</h1>
+            <div class="wrapper" style="margin-left: auto"> <svg class="search-icon" xmlns="http://www.w3.org/2000/svg"
+                    width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg> <input type="text" id="category-searchBar" placeholder="search topic"></div>
+
+        </div>
+        <div id="category-grid">
+
+        </div>
+    </div>
+    <!-- ════════════════════════════════════════════════════════
+     SCREEN: QUIZ
+     ════════════════════════════════════════════════════════ -->
+
+    <div class="screen" id="quiz-screen">
+        <div class="quiz-header">
+            <button class="btn back">&lt;</button>
+            <div class="quiz-category-tag"></div>
+            <div class="timer-container">
+                <svg class="timer-svg" viewBox="0 0 44 44">
+                    <circle class="timer-track" cx="22" cy="22" r="20" />
+                    <circle class="timer-progress" cx="22" cy="22" r="20" />
+                </svg>
+                <span class="timer-text">0</span>
+            </div>
+
+        </div>
+        <div class="question-card">
+
+
+
+        </div>
+
+
+
+    </div>
+    <div class="screen" id="result-screen">
+
+        <div class="result-stat-row">
+
+            <div class="result-stat">
+                <div class="result-stat-val" id="res-mistakes" style="color:var(--wrong)">0</div>
+                <div class="result-stat-key">Mistakes</div>
+            </div>
+
+            <div class="result-stat center">
+                <div class="result-stat-val main-score" id="res-correct" style="color:var(--correct)">0</div>
+                <div class="result-stat-key">Score</div>
+            </div>
+
+            <div class="result-stat">
+                <div class="result-stat-val" id="res-accuracy" style="color:var(--accent)">0%</div>
+                <div class="result-stat-key">Accuracy</div>
+            </div>
+
+        </div>
+
+        <div class="result-secondary">
+            <span id="res-total">📋 0 Questions</span>
+            <span id="res-time">⏱ 0:00</span>
+        </div>
+
+        <div class="result-actions">
+            <button class="btn retry">↺ Retry</button>
+            <button class="btn goCat">New Category</button>
+            <button class="btn back" style="width: 200px;">🏠 Home</button>
+        </div>
+
+
+    </div>
+
+    <div class="screen active" id="admin-screen">
+
+        <div id="admin-header">
+            <h1>Work Space</h1>
+            <button class="logout-btn">logout</button>
+        </div>
+        <div id="admin-nav">
+            <button class="admin-tab active" onclick="switchTab(question, this)">questions </button>
+            <button class="admin-tab" onclick="switchTab(category, this)">categories</button>
+            <button class="admin-tab" onclick="switchTab(settings, this)">settings</button>
+        </div>
+
+        <div class="tab-panel active" id="question-tab">
+
+            <div class="wrapper">
+                <select class="filter" id="cat-filter">
+                    <option value="">All categories</option>
+                </select>
+                <select class="filter" id="diff-filter">
+                    <option value="">All difficulty</option>
+                    <option value="easy">easy</option>
+                    <option value="medium">medium</option>
+                    <option value="hard">hard</option>
+                </select>
+            </div>
+
+
+            <div style="max-height: 70vh; overflow-y: auto; scrollbar-width: none;">
+                <table id="question-table">
+                    <colgroup>
+                        <col style="width: 50px;">
+                        <col style="width: 100px;">
+                        <col style="width: 100px;">
+                        <col style="width: 80px;">
+                        <col style="width: auto">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Category</th>
+                            <th>Difficulty</th>
+                            <th>Options</th>
+                            <th>Question</th>
+                        </tr>
+                    </thead>
+                    <tbody id="question-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="tab-panel" id="category-tab">
+
+    </div>
+    <div class="tab-panel" id="settings-tab"></div>
+
+    </div>
+
+    <dialog id="admin-modal">
+        <button id="admin-modal-close-btn">X</button>
+        <h1>Login</h1>
+        <div class="input-field">
+            <label for="admin-pass-input">Password</label>
+            <input type="password" id="admin-pass-input">
+            <button id="toggle-btn" aria-label="show password"><svg class="eye-close" xmlns="http://www.w3.org/2000/svg"
+                    width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                </svg></button>
+            <span id="admin-pass-err"></span>
+        </div>
+
+
+        <button id="admin-login-btn">LOGIN</button>
+    </dialog>
+
+
+
+
+
+
+
+
+
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>
