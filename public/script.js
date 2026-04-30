@@ -26,7 +26,7 @@ function switchScreenTo(screenName) {
   let screen = document.getElementById(id);
   if (screen) {
     if (id === "admin-screen") document.getElementById("header").style.backgroundColor = "#4b4b51";
-    else document.getElementById("header").style.backgroundColor = " #A63446";
+    else document.getElementById("header").style.backgroundColor = "#7a87a0;";
 
     screen.classList.add("active");
   }

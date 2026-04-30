@@ -25,7 +25,7 @@ app.post("/admin/login", (req, res) => {
     return res.json({ success: true });
   }
 
-  return res.status(401).json({ success: false, message: "wrong password po" });
+  return res.status(401).json({ success: false, message: "❌ wrong password po" });
 });
 
 
