@@ -20,8 +20,14 @@ function switchScreenTo(screenName) {
   document.querySelectorAll(".screen").forEach((s) => {
     s.classList.remove("active");
   });
-  let screen = document.getElementById(screenName + "-screen");
+
+  const id = screenName + "-screen";
+
+  let screen = document.getElementById(id);
   if (screen) {
+    if (id === "admin-screen") document.getElementById("header").style.backgroundColor = "#4b4b51";
+    else document.getElementById("header").style.backgroundColor = " #A63446";
+
     screen.classList.add("active");
   }
 }
@@ -217,6 +223,26 @@ const Timer = (() => {
 //                    ADMIN 
 // ══════════════════════════════════════════════════════════════════════════════════
 
+
+
+function switchTab() {
+  document.querySelectorAll(".admin-tab").forEach((t) => { t.classList.remove("active"); });
+  document.querySelectorAll(".tab-panel").forEach((t) => { t.classList.remove("active"); });
+
+  this.classList.add("active");
+  const tabname = this.dataset.tab;
+  console.log(this);
+
+  let tab = document.getElementById(tabname + "-tab");
+  if (tab) {
+    tab.classList.add("active");
+  }
+}
+
+
+
+
+
 function renderCatFilter() {
   if (state.categories.length == 0) return;
   const el = document.getElementById("cat-filter")
@@ -252,6 +278,8 @@ async function verifyPassword() {
     getAdminQuestions()
       .then(() => getAdminCategories())
       .then(() => { renderCatFilter(); loadAdminQuestions() });
+
+
     return;
 
   }
@@ -342,22 +370,6 @@ function filterRows() {
 }
 
 
-
-function switchTab(name, btn) {
-  document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
-  document.querySelectorAll("tab-panel").forEach(t => t.classList.remove("active"));
-
-  btn.classList.add("active");
-  const id = name + "-tab";
-  const tab = document.getElementById(id);
-  if (tab) {
-    if (name == 'categories') { }
-    tab.classList.add("active");
-
-  }
-
-
-}
 
 
 
@@ -456,14 +468,16 @@ modal.addEventListener("click", (e) => {
     passInput.type = isHidden ? 'text' : 'password';
     e.target.innerHTML = isHidden ? open : close;
   }
-
-})
-
+});
 
 passInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); verifyPassword(); } });
 
 //admin
 
+
+document.querySelectorAll(".admin-tab").forEach(a => { a.addEventListener("click", switchTab) });
+
+//question filter
 ['cat-filter', 'diff-filter'].forEach(id => {
   document.getElementById(id).addEventListener('change', filterRows);
 });
