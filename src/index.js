@@ -12,6 +12,25 @@ app.use(express.static("public"));
 app.use("/categories", catRoutes);
 app.use("/questions", questionsRoutes);
 
+
+
+app.post("/admin/login", (req, res) => {
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({ success: false, message: "no password provided" });
+  }
+
+  if (password === process.env.ADMIN_PASSWORD) {
+    return res.json({ success: true });
+  }
+
+  return res.status(401).json({ success: false, message: "wrong password po" });
+});
+
+
+
+
 console.log("Ooops error haha wews");
 
 app.listen(3000, () => {

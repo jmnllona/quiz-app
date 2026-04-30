@@ -226,12 +226,26 @@ function renderCatFilter() {
 
 }
 
-function verifyPassword() {
+async function verifyPassword() {
   const modal = document.getElementById("admin-modal");
   const p = document.getElementById("admin-pass-input");
   const err = document.getElementById("admin-pass-err");
 
-  if (p.value.trim() == adminPassword) {
+
+  if (p.value.trim() == "") {
+    err.textContent = "hey, you forgot to type a password 👀";
+    err.classList.add("active");
+    p.style.borderColor = "red";
+    p.focus();
+    return;
+
+  }
+
+  const res = await Api.verifyPassword(p.value.trim());
+
+  console.log(res);
+
+  if (res.success) {
     state.adminLoggedIn = true;
     modal.close();
     switchScreenTo("admin");
@@ -242,21 +256,12 @@ function verifyPassword() {
 
   }
 
-  if (p.value.trim() == "") {
-    err.textContent = "please input a motherfucking password nigga";
-    err.classList.add("active");
-    p.style.borderColor = "red";
-    p.focus();
-    return;
-
-  }
-
   else {
-    err.textContent = "wrong password nigga";
+    err.textContent = res.message;
     err.classList.add("active");
     p.style.borderColor = "red";
     p.focus();
-    return;
+
   }
 
 }
@@ -482,4 +487,8 @@ function adjustFont() {
     text.style.fontSize = fontSize + "px";
   }
 }
+
+//      git add .
+//      git commit -m "your message"
+//      git push
 

@@ -17,7 +17,7 @@ const err = {
 
 
 
-// CATEGORIES  _____________________________________________________
+// CATEGORIES  __________________________________________________________________________________________________________
 
 const getCategories = async () => {
   try {
@@ -78,7 +78,7 @@ const updateCategoryName = async (id, name) => {
   }
 };
 
-// QUIZ  _____________________________________________________
+// QUIZ  __________________________________________________________________________________________________________
 
 const getQuestions = async (catId, difficulty) => {
   try {
@@ -115,7 +115,6 @@ const getAllQuestions = async (catId, difficulty) => {
 
     const data = await res.json();
 
-
     return data;
 
   } catch (e) {
@@ -126,4 +125,32 @@ const getAllQuestions = async (catId, difficulty) => {
   }
 };
 
-export default { getCategories, updateCategoryName, getQuestions, getAllQuestions };
+// admin login  __________________________________________________________________________________________________________
+
+const verifyPassword = async (p) => {
+
+  try {
+    const res = await fetch('/admin/login/', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: p })
+    });
+
+    const data = await res.json();
+
+    return data;
+
+
+  } catch (e) {
+    return {
+      success: false,
+      message: err.message2,
+    };
+
+  }
+
+
+}
+
+
+export default { getCategories, updateCategoryName, getQuestions, getAllQuestions, verifyPassword };
