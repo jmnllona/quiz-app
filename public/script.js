@@ -370,7 +370,26 @@ function filterRows() {
 }
 
 
+function checkIsFormValid() {
+  const q = document.getElementById("q-text");
+  const optA = document.getElementById("opt-a");
+  const optB = document.getElementById("opt-b");
+  const optC = document.getElementById("opt-c");
+  const optD = document.getElementById("opt-d");
+  const answer = document.getElementById("q-answer");
 
+  if (q.value == "") { q.nextElementSibling.classList.add('active'); return; }
+  if (optA.value == "") { optA.closest('.field-group').querySelector('.form-err').classList.add('active'); return; }
+  if (optB.value == "") { optB.closest('.field-group').querySelector('.form-err').classList.add('active'); return; }
+  if (optC.value == "") { optC.closest('.field-group').querySelector('.form-err').classList.add('active'); return; }
+  if (optD.value == "") { optD.closest('.field-group').querySelector('.form-err').classList.add('active'); return; }
+  if (!answer.value) { answer.nextElementSibling.classList.add('active'); return; }
+
+
+  return [q.value, optA.value, optB.value, optC.value, optD.value, answer.value];
+
+
+}
 
 
 // ══════════════════════════════════════════════════════════════════════════════════
@@ -469,23 +488,45 @@ modal.addEventListener("click", (e) => {
     e.target.innerHTML = isHidden ? open : close;
   }
 });
-
+// modal pass input listener
 passInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); verifyPassword(); } });
 
 //admin
 
-
+//switch tab
 document.querySelectorAll(".admin-tab").forEach(a => { a.addEventListener("click", switchTab) });
 
 //question filter
-['cat-filter', 'diff-filter'].forEach(id => {
-  document.getElementById(id).addEventListener('change', filterRows);
+['cat-filter', 'diff-filter',].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => {
+
+    filterRows();
+    const el = document.getElementById("question-table");
+    window.scrollTo(el);
+  });
 });
 
-console.log(document.getElementById('cat-filter'));
-console.log(document.getElementById('cat-filter'));
-console.log(document.getElementById('diff-filter'));
-console.log(typeof filterRows);
+//add question btn
+document.getElementById('add-question-btn').addEventListener('click', () =>
+  document.getElementById('q-form').classList.add("active"));
+
+//add question form
+document.getElementById("q-form").addEventListener("click", (e) => {
+  if (e.target.id === "btn-cancel") {
+    e.currentTarget.classList.remove("active");
+    return;
+  }
+  if (e.target.id === "btn-add") {
+
+    const q = checkIsFormValid();
+    console.log(q);
+
+    return;
+  }
+
+})
+
+
 
 
 function adjustFont() {

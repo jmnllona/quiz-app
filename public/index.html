@@ -40,7 +40,7 @@
             --red: #A63446;
             --alabaster-grey: #cfdbd5ff;
             --soft-linen: #e8eddfff;
-            --tuscan-sun: #f5cb5cff;
+            --tuscan-sun: rgb(255, 229, 156);
             --carbon-black: #242423ff;
             --darkgrey: rgb(49, 49, 52);
             --darkgreylight: #4b4b51;
@@ -52,6 +52,14 @@
             --muted: #7a87a0;
             --correct: #54d9a8;
             --wrong: #ff6b6b;
+            --border-color: #2e2e3a;
+            --accent: #7c6af7;
+            --accent-dim: rgba(124, 106, 247, 0.15);
+            --text: #e8e8f0;
+            --text-muted: #6b6b80;
+            --surface: #16161e;
+            --danger: #f76a6a;
+            --danger-dim: rgba(247, 106, 106, 0.12);
         }
 
         .screen {
@@ -635,7 +643,7 @@
             gap: 20px;
             border: solid 1px var(--muted);
             border-radius: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         .admin-tab {
@@ -647,12 +655,12 @@
             background-color: transparent;
             color: var(--muted);
             border-radius: 7px;
+            transition: background-color 0.2s;
 
         }
 
         .admin-tab.active {
             background-color: var(--darkgreylight);
-
             color: white;
         }
 
@@ -804,6 +812,250 @@
             color: rgb(151, 247, 151);
 
         }
+
+        #q-form {
+            width: 100%;
+            height: fit-content;
+            border: solid 1px var(--darkgreylight);
+            outline: none;
+            border-radius: 10px;
+            display: none;
+            flex-direction: column;
+            padding: 30px;
+            gap: 30px;
+            margin-bottom: 20px;
+
+
+
+
+        }
+
+        #q-form.active {
+            display: flex;
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 20px;
+            border-bottom: var(--darkgreylight);
+        }
+
+        .form-header .icon {
+            width: 32px;
+            height: 32px;
+            background: rgb(95, 96, 101);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-header .icon svg {
+            width: 16px;
+            height: 16px;
+            stroke: white;
+        }
+
+        .form-header h2 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--darkgreylight);
+            letter-spacing: -0.02em;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            position: relative;
+        }
+
+        #q-form label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            font-family: 'DM Mono', monospace;
+        }
+
+        #q-text,
+        .option-item input[type="text"],
+        .bottom-row input[type="text"],
+        #q-form select {
+            background: transparent;
+            border: solid 1px var(--darkgreylight);
+            border-radius: 8px;
+            color: black;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+
+            outline: none;
+            width: 100%;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        #q-text {
+            resize: vertical;
+            min-height: 88px;
+            line-height: 1.6;
+            max-height: 300px;
+            padding: 10px 14px;
+        }
+
+        #q-text::placeholder,
+        #q-form input[type="text"]::placeholder,
+        .bottom-row input[type="text"]::placeholder,
+        #q-form select {
+
+            color: var(--text-muted);
+        }
+
+        .option-item input[type="text"]:focus {
+            border: none;
+        }
+
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 8px;
+            padding: 8px 12px;
+            transition: border-color 0.5s;
+            background: transparent;
+            border: solid 1px;
+            border-color: transparent;
+            position: relative;
+
+        }
+
+        .option-item:focus-within {
+
+            border-color: var(--darkgreylight);
+        }
+
+        .option-badge {
+            width: 22px;
+            height: 22px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-family: 'DM Mono', monospace;
+            flex-shrink: 0;
+        }
+
+        .option-item input[type="text"] {
+            height: 30px;
+            padding-left: 10px;
+
+        }
+
+
+        .bottom-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #hint {
+            height: 30px;
+            width: auto;
+            padding-left: 10px;
+            margin-right: 100px;
+        }
+
+
+
+
+        #q-form select {
+            height: 30px;
+            width: auto;
+            padding-left: 10px;
+            margin-right: 100px;
+        }
+
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding-top: 8px;
+            border-top: var(--darkgreylight);
+
+        }
+
+        #q-form button {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.15s, transform 0.1s, box-shadow 0.15s;
+            padding: 5px 40px 5px 10px;
+        }
+
+        #q-form button:active {
+            transform: scale(0.97);
+        }
+
+        #btn-cancel {
+            background-color: var(--danger);
+            color: rgb(255, 255, 255);
+        }
+
+        #btn-cancel:hover {
+            opacity: 0.9;
+            box-shadow: 4px 4px 3px rgba(68, 68, 68, 0.3);
+
+
+        }
+
+        #btn-add {
+            background: var(--accent);
+            color: #fff;
+
+        }
+
+        #btn-add:hover {
+            opacity: 0.9;
+            box-shadow: 4px 4px 3px rgba(68, 68, 68, 0.3);
+        }
+
+
+        .form-err {
+            color: red;
+            display: none;
+            position: absolute;
+            top: -1;
+            left: 70px;
+            font-size: 12;
+        }
+
+        .form-err.active {
+            display: flex;
+        }
+
+        .form-err.ans-err {
+            left: 0;
+            top: 55px;
+        }
     </style>
 </head>
 
@@ -914,6 +1166,83 @@
         </div>
 
         <div class="tab-panel active" id="question-tab">
+
+            <div id="q-form">
+                <div class="form-header">
+                    <div class="icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                    </div>
+                    <h2>Add Question</h2>
+                </div>
+
+                <!-- Question Text -->
+                <div class="field-group">
+                    <label>Question</label>
+                    <textarea id="q-text" placeholder="Type your question here…"></textarea>
+                    <span class="form-err">* Please Enter Question</span>
+                </div>
+
+                <!-- Options -->
+                <div class="field-group">
+                    <label>Options</label>
+                    <div class="options-grid">
+                        <div class="option-item">
+                            <span class="option-badge">A</span>
+                            <input type="text" id="opt-a" placeholder="Option A" />
+                        </div>
+                        <div class="option-item">
+                            <span class="option-badge">B</span>
+                            <input type="text" id="opt-b" placeholder="Option B" />
+                        </div>
+                        <div class="option-item">
+                            <span class="option-badge">C</span>
+                            <input type="text" id="opt-c" placeholder="Option C" />
+
+                        </div>
+                        <div class="option-item">
+                            <span class="option-badge">D</span>
+                            <input type="text" id="opt-d" placeholder="Option D" />
+                        </div>
+                    </div>
+                    <span class="form-err">* This field is required</span>
+
+                </div>
+
+                <!-- Default + Correct Answer -->
+                <div class="bottom-row">
+                    <div class="field-group">
+                        <label>Hint</label>
+                        <input type="text" id="hint" placeholder="Hint (optional)">
+                        <span class="form-err"></span>
+                    </div>
+                    <div class="field-group">
+                        <label>Correct Answer</label>
+
+                        <select id="q-answer">
+                            <option value="" disabled selected>Select…</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                        <span class="form-err ans-err">* Please select correct answer.</span>
+
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="actions">
+                    <button id="btn-cancel" type="button">Cancel</button>
+                    <button id="btn-add" type="button">Add Question</button>
+                </div>
+
+            </div>
+
 
             <div class="wrapper">
                 <select class="des1 filter" id="cat-filter">
