@@ -1056,6 +1056,43 @@
             left: 0;
             top: 55px;
         }
+
+        #category-tab {
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        #category-tab .field-group {
+
+            gap: 30px;
+        }
+
+
+
+        #add-category-btn {
+            margin-left: auto;
+        }
+
+        #admin-cat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            /* max 4 columns */
+            gap: 16px;
+        }
+
+        .admin-cat-card {
+            width: auto;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* background-color: rgb(191, 197, 205); */
+            border-radius: 10px;
+            border: solid 1px var(--darkgreylight);
+            justify-content: center;
+            font-size: 12px;
+
+        }
     </style>
 </head>
 
@@ -1161,11 +1198,12 @@
         </div>
         <div id="admin-nav">
             <button class="admin-tab active" data-tab="question">questions </button>
-            <button class="admin-tab" data-tab="categories">categories</button>
+            <button class="admin-tab" data-tab="category">categories</button>
             <button class="admin-tab" data-tab="settings">settings</button>
         </div>
 
         <div class="tab-panel active" id="question-tab">
+            <h1>Questions</h1>
 
             <div id="q-form">
                 <div class="form-header">
@@ -1282,15 +1320,27 @@
             </div>
         </div>
 
+        <div class="tab-panel" id="category-tab">
+            <div class="field-group">
+                <div class="wrapper">
+                    <h1>Categories</h1>
+                    <button class="des1" id="add-category-btn"> + add Category</button>
+                </div>
+                <div id="admin-cat-grid">
+                    <div class="admin-cat-card">no category yet</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="tab-panel" id="settings-tab"></div>
 
     </div>
-    <div class="tab-panel" id="category-tab">
-        div.
+
 
     </div>
-    <div class="tab-panel" id="settings-tab"></div>
 
-    </div>
+
 
     <dialog id="admin-modal">
         <button id="admin-modal-close-btn">X</button>

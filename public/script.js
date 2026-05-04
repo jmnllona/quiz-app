@@ -231,11 +231,12 @@ function switchTab() {
 
   this.classList.add("active");
   const tabname = this.dataset.tab;
-  console.log(this);
+
 
   let tab = document.getElementById(tabname + "-tab");
   if (tab) {
     tab.classList.add("active");
+
   }
 }
 
@@ -246,6 +247,7 @@ function switchTab() {
 function renderCatFilter() {
   if (state.categories.length == 0) return;
   const el = document.getElementById("cat-filter")
+  el.innerHTML = `<option value="">All categories</option>`;
 
   const options = state.categories.map(d => (`<option value="${d.id}">${d.name}</option>`)).join("");
   el.insertAdjacentHTML("beforeend", options);
@@ -414,7 +416,7 @@ document.getElementById("home-screen").addEventListener("click", (e) => {
 
 document.getElementById("category-screen").addEventListener("click", (e) => {
   if (e.target.classList.contains("back")) {
-    goHome(); renderCatFilter();
+    goHome();
   } else if (e.target.classList.contains("retry")) {
     showCategories();
   } else {
