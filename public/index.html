@@ -774,13 +774,30 @@
             color: #592c1c;
         }
 
+        .cat-geography {
+            background-color: rgb(218, 211, 188);
+            color: #594e1c;
+        }
+
+        .cat-flags {
+            background-color: rgb(188, 193, 218);
+            color: #1c3759;
+        }
+
+        .cat-animals {
+            background-color: rgb(188, 193, 218);
+            color: #1c3759;
+        }
+
+
+
 
         .diff-easy {
             background-color: rgb(201, 222, 192);
             color: #3d6438
         }
 
-        .diff-intermediate {
+        .diff-medium {
             background-color: rgb(216, 211, 192);
             color: #543a21
         }
@@ -868,7 +885,7 @@
         .field-group {
             display: flex;
             flex-direction: column;
-            gap: 7px;
+            gap: 10px;
             position: relative;
         }
 
@@ -968,9 +985,10 @@
 
         .bottom-row {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
         }
 
         #hint {
@@ -1053,9 +1071,19 @@
         }
 
         .form-err.ans-err {
-            left: 0;
-            top: 55px;
+            left: 120px;
+            top: -1px;
         }
+
+        .form-err.cat-err {
+            left: 80px;
+        }
+
+        .form-err.diff-err {
+            left: 80px;
+        }
+
+
 
         #category-tab {
             flex-direction: column;
@@ -1254,10 +1282,19 @@
                 <!-- Default + Correct Answer -->
                 <div class="bottom-row">
                     <div class="field-group">
-                        <label>Hint</label>
-                        <input type="text" id="hint" placeholder="Hint (optional)">
-                        <span class="form-err"></span>
+                        <label>Difficulty</label>
+
+                        <select id="q-diff">
+                            <option value="" disabled selected>Select…</option>
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+
+                        </select>
+                        <span class="form-err diff-err">* Please select difficulty.</span>
+
                     </div>
+
                     <div class="field-group">
                         <label>Correct Answer</label>
 
@@ -1271,6 +1308,25 @@
                         <span class="form-err ans-err">* Please select correct answer.</span>
 
                     </div>
+
+                    <div class="field-group">
+                        <label>Categories</label>
+
+                        <select id="q-form-cat">
+                            <option value="" disabled selected>Select…</option>
+
+                        </select>
+                        <span class="form-err cat-err">* Please select which category.</span>
+
+                    </div>
+
+                    <div class="field-group">
+                        <label>Hint</label>
+                        <input type="text" id="hint" placeholder="Hint (optional)">
+                        <span class="form-err"></span>
+                    </div>
+
+
                 </div>
 
                 <!-- Actions -->

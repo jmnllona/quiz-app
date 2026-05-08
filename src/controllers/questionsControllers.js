@@ -26,11 +26,11 @@ const Err = {
 
 const addQuestion = async (req, res) => {
   try {
-    const { question, options, answer } = req.body;
+    const q = req.body;
 
     await db.query(
-      `INSERT INTO questions(question, options, answer) VALUES ($1, $2, $3)`,
-      [question, options, answer],
+      `INSERT INTO questions(question, options, answer, difficulty, category_id) VALUES ($1, $2, $3, $4, $5)`,
+      [q.question, q.options, q.answer, q.difficulty, q.category_id],
     );
 
     res.json({

@@ -10,7 +10,13 @@ const err = {
     <h3>⚠️ Could not get questions</h3>
     <p>Make sure your backend is running at <code>$CONFIG.BASE_URL}</code></p>
     <br><button class="btn retry" >Retry</button>
+  </div>`,
+  addErr: `<div class="error-state" style="margin:auto;">
+    <h3>⚠️ Could not add question</h3>
+    <p>Make sure your backend is running at <code>$CONFIG.BASE_URL}</code></p>
+    <br><button class="btn retry" >Retry</button>
   </div>`
+
 
 
 }
@@ -78,7 +84,7 @@ const updateCategoryName = async (id, name) => {
   }
 };
 
-// QUIZ  __________________________________________________________________________________________________________
+// Quesion  __________________________________________________________________________________________________________
 
 const getQuestions = async (catId, difficulty) => {
   try {
@@ -109,7 +115,7 @@ const getQuestions = async (catId, difficulty) => {
 };
 
 
-const getAllQuestions = async (catId, difficulty) => {
+const getAllQuestions = async () => {
   try {
     const res = await fetch(`/questions/`);
 
@@ -121,6 +127,35 @@ const getAllQuestions = async (catId, difficulty) => {
     return {
       success: false,
       message: err.message2,
+    };
+  }
+};
+
+
+const addQuestion = async (q) => {
+  try {
+    const res = await fetch(`/questions/`, {
+
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question: q.question,
+        options: q.options,
+        answer: q.answer,
+        difficulty: q.difficulty,
+        category_id: q.category_id
+
+      })
+    });
+
+    const data = await res.json();
+
+    return data;
+
+  } catch (e) {
+    return {
+      success: false,
+      message: err.addErr,
     };
   }
 };
@@ -153,4 +188,4 @@ const verifyPassword = async (p) => {
 }
 
 
-export default { getCategories, updateCategoryName, getQuestions, getAllQuestions, verifyPassword };
+export default { getCategories, updateCategoryName, getQuestions, getAllQuestions, verifyPassword, addQuestion };

@@ -240,19 +240,33 @@ function switchTab() {
   }
 }
 
-
-
-
-
-function renderCatFilter() {
+function renderCat(el, defaultSelect) {
   if (state.categories.length == 0) return;
-  const el = document.getElementById("cat-filter")
-  el.innerHTML = `<option value="">All categories</option>`;
+
+  el.innerHTML = defaultSelect;
 
   const options = state.categories.map(d => (`<option value="${d.id}">${d.name}</option>`)).join("");
   el.insertAdjacentHTML("beforeend", options);
 
 }
+
+function renderCatFilter() {
+
+  const el = document.getElementById("cat-filter");
+  const d = `<option value="">All categories</option>`;
+  renderCat(el, d);
+
+}
+
+
+function renderFormCat() {
+
+  const el = document.getElementById("q-form-cat");
+  const d = ` <option value="" disabled selected>Select…</option>`;
+  renderCat(el, d);
+
+}
+
 
 async function verifyPassword() {
   const modal = document.getElementById("admin-modal");
@@ -372,26 +386,57 @@ function filterRows() {
 }
 
 
+
 function checkIsFormValid() {
-  const q = document.getElementById("q-text");
-  const optA = document.getElementById("opt-a");
-  const optB = document.getElementById("opt-b");
-  const optC = document.getElementById("opt-c");
-  const optD = document.getElementById("opt-d");
-  const answer = document.getElementById("q-answer");
+  const fields = {
+    q: document.getElementById("q-text"),
+    optA: document.getElementById("opt-a"),
+    optB: document.getElementById("opt-b"),
+    optC: document.getElementById("opt-c"),
+    optD: document.getElementById("opt-d"),
+    answer: document.getElementById("q-answer"),
+    diff: document.getElementById("q-diff"),
+    cat: document.getElementById("q-form-cat"),
+  };
 
-  if (q.value == "") { q.nextElementSibling.classList.add('active'); return; }
-  if (optA.value == "") { optA.closest('.field-group').querySelector('.form-err').classList.add('active'); return; }
-  if (optB.value == "") { optB.closest('.field-group').querySelector('.form-err').classList.add('active'); return; }
-  if (optC.value == "") { optC.closest('.field-group').querySelector('.form-err').classList.add('active'); return; }
-  if (optD.value == "") { optD.closest('.field-group').querySelector('.form-err').classList.add('active'); return; }
-  if (!answer.value) { answer.nextElementSibling.classList.add('active'); return; }
+  let isValid = true;
+
+  // Clear previous errors first
+  document.querySelectorAll('.form-err').forEach(el => el.classList.remove('active'));
+
+  // Validate all fields
+  Object.values(fields).forEach(field => {
+    if (field.value.trim() === "") {
+      const err = field.closest('.field-group')?.querySelector('.form-err')
+        ?? field.nextElementSibling;
+      err?.classList.add('active');
+      isValid = false;
+    }
+  });
+
+  if (!isValid) return null;
+
+  //get answer value
+  const answer = document.getElementById(`opt-${fields.answer.value.trim().toLowerCase()}`).value.trim();
 
 
-  return [q.value, optA.value, optB.value, optC.value, optD.value, answer.value];
 
-
+  // Build and return the object only if everything is valid
+  return {
+    question: fields.q.value.trim(),
+    options: [
+      fields.optA.value.trim(),
+      fields.optB.value.trim(),
+      fields.optC.value.trim(),
+      fields.optD.value.trim()
+    ],
+    answer: answer,
+    difficulty: fields.diff.value.trim(),
+    category_id: fields.cat.value.trim(),
+  };
 }
+
+
 
 
 // ══════════════════════════════════════════════════════════════════════════════════
@@ -509,11 +554,13 @@ document.querySelectorAll(".admin-tab").forEach(a => { a.addEventListener("click
 });
 
 //add question btn
-document.getElementById('add-question-btn').addEventListener('click', () =>
-  document.getElementById('q-form').classList.add("active"));
+document.getElementById('add-question-btn').addEventListener('click', () => {
+  document.getElementById('q-form').classList.add("active");
+  renderFormCat();
+});
 
 //add question form
-document.getElementById("q-form").addEventListener("click", (e) => {
+document.getElementById("q-form").addEventListener("click", async (e) => {
   if (e.target.id === "btn-cancel") {
     e.currentTarget.classList.remove("active");
     return;
@@ -522,6 +569,14 @@ document.getElementById("q-form").addEventListener("click", (e) => {
 
     const q = checkIsFormValid();
     console.log(q);
+
+    if (!q) return;
+    const res = await Api.addQuestion(q);
+    getAdminQuestions()
+      .then(() => { loadAdminQuestions(); filterRows(); });
+
+
+
 
     return;
   }
