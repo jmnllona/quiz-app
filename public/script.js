@@ -96,7 +96,7 @@ async function startQuiz(catId) {
 
 
   state.selectedCategory = state.categories.find((c) => c.id === catId);
-  const res = await Api.getQuestions(state.selectedCategory.id, "easy");
+  const res = await Api.getQuestions(state.selectedCategory.id, "medium");
 
 
   if (!res.success) {
