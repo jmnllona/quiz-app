@@ -12,7 +12,9 @@ let state = {
   timerSeconds: 10,
   correctScore: 0,
   mistakes: 0,
-  adminLoggedIn: false
+  adminLoggedIn: false,
+  admin_categories: [],
+  admin_questions: [],
 
 };
 
@@ -63,12 +65,12 @@ function renderCategories(c) {
 
 
   const details = [
-    { id: 1, img: "./img/math-icon.svg", des: "math is the easiest subject fr" },
-    { id: 2, img: "./img/science-icon.svg", des: "science is the....." },
-    { id: 3, img: "./img/astronomy-icon.svg", des: "ill go to the other planet" },
-    { id: 4, img: "./img/geography-icon.svg" },
-    { id: 5, img: "./img/flag-icon.svg" },
-    { id: 6, img: "./img/plants-icon.svg" },
+    { id: 1, img: "./img/cat/icon/math-icon.svg", des: "math is the easiest subject fr" },
+    { id: 2, img: "./img/cat/icon/science-icon.svg", des: "science is the....." },
+    { id: 3, img: "./img/cat/icon/astronomy-icon.svg", des: "ill go to the other planet" },
+    { id: 4, img: "./img/cat/icon/geography-icon.svg" },
+    { id: 5, img: "./img/cat/icon/flag-icon.svg" },
+    { id: 6, img: "./img/cat/icon/plants-icon.svg" },
   ]
 
   el.innerHTML = c
@@ -241,11 +243,11 @@ function switchTab() {
 }
 
 function renderCat(el, defaultSelect) {
-  if (state.categories.length == 0) return;
+  if (state.admin_categories.length == 0) return;
 
   el.innerHTML = defaultSelect;
 
-  const options = state.categories.map(d => (`<option value="${d.id}">${d.name}</option>`)).join("");
+  const options = state.admin_categories.map(d => (`<option value="${d.id}">${d.name}</option>`)).join("");
   el.insertAdjacentHTML("beforeend", options);
 
 }
@@ -293,7 +295,7 @@ async function verifyPassword() {
     switchScreenTo("admin");
     getAdminQuestions()
       .then(() => getAdminCategories())
-      .then(() => { renderCatFilter(); loadAdminQuestions() });
+      .then(() => { renderCatFilter(); loadAdminQuestions(); loadAdminCategories() });
 
 
     return;
@@ -320,8 +322,8 @@ async function getAdminQuestions() {
     return;
   }
   console.log(res.success, res.message)
-  state.questions = res.data;
-  console.log(state.questions);
+  state.admin_questions = res.data;
+  console.log(state.admin_questions);
 
 }
 
@@ -334,14 +336,14 @@ async function getAdminCategories() {
     return;
   }
 
-  state.categories = res2.data;
-  console.log(state.categories);
+  state.admin_categories = res2.data;
+  console.log(state.admin_categories);
 }
 
 const letterArr = ['A', 'B', 'C', 'D', 'E', 'F', 'G',];
 
 function loadAdminQuestions() {
-  renderQuestions(state.questions);
+  renderQuestions(state.admin_questions);
 }
 
 function renderQuestions(questions) {
@@ -353,7 +355,7 @@ function renderQuestions(questions) {
   }
 
   tbody.innerHTML = questions.map(q => {
-    const cat = (state.categories.find(c => c.id === q.category_id)?.name ?? "unknown").toLowerCase().replaceAll(" ", "-");
+    const cat = (state.admin_categories.find(c => c.id === q.category_id)?.name ?? "unknown").toLowerCase().replaceAll(" ", "-");
 
     return `<tr>
       <td>${q.id}</td>
@@ -401,15 +403,20 @@ function checkIsFormValid() {
 
   let isValid = true;
 
+
   // Clear previous errors first
   document.querySelectorAll('.form-err').forEach(el => el.classList.remove('active'));
+
+
 
   // Validate all fields
   Object.values(fields).forEach(field => {
     if (field.value.trim() === "") {
-      const err = field.closest('.field-group')?.querySelector('.form-err')
-        ?? field.nextElementSibling;
+      const err = field.closest('.field-group')?.querySelector('.form-err');
       err?.classList.add('active');
+      const errText = document.getElementById("form-err-text");
+      errText?.classList.add('active');
+
       isValid = false;
     }
   });
@@ -436,6 +443,56 @@ function checkIsFormValid() {
   };
 }
 
+function loadAdminCategories(categories) {
+  renderAdminCategories(state.admin_categories);
+}
+
+
+function renderAdminCategories(categories) {
+  let cbody = document.getElementById("admin-cat-wrapper");
+
+  if (categories.length === 0) {
+    cbody.innerHTML = `<div class="admin-cat-card">no category yet</div>`; return;
+  }
+
+
+  const data = [
+    { id: 1, img: "./img/cat/card img/math.webp", des: "math is the easiest subject fr" },
+    { id: 2, img: "./img/cat/card img/science.webp", des: "science is the....." },
+    { id: 3, img: "./img/cat/card img/astronomy.webp", des: "ill go to the other planet" },
+    { id: 4, img: "./img/cat/card img/geography.webp" },
+    { id: 5, img: "./img/cat/card img/flags.webp" },
+    { id: 6, img: "./img/cat/card img/animals.webp" },
+  ]
+
+  cbody.innerHTML = categories.map(c => {
+
+    let count = 0;
+    state.admin_questions.forEach(q => q.category_id == c.id ? count++ : '');
+
+    const des = data.find(d => d.id == c.id)?.des ?? "no description yet";
+    const img = data.find(d => d.id == c.id)?.img ?? "./img/default.img";
+
+    return `<div class="admin-cat-card">
+  <img class="cat-card-img" src="${img}" 
+    onerror="this.onerror=null; this.src='https://cdn1.vectorstock.com/i/thumb-large/65/30/default-image-icon-missing-picture-page-vector-40546530.jpg';">
+  <div class="field-group">
+    <span class="badge cat-${c.name.toLowerCase()}" style="width: fit-content; border-radius: 30px; font-size: 15px;">
+    ${c.name}
+    </span>
+ 
+  <p style=" overflow: hidden;
+            text-overflow: ellipsis;white-space: nowrap">${des} sdfjsdjf slkdfjskjdf lsdjfsj</p>
+  <p style="color: #ceff79" ><span>${count}</span> questions</p>
+   </div>
+</div>`;
+
+
+  }).join("");
+
+
+
+}
 
 
 
@@ -552,17 +609,21 @@ document.querySelectorAll(".admin-tab").forEach(a => { a.addEventListener("click
     window.scrollTo(el);
   });
 });
+// q-form
 
+const form = document.getElementById('q-form');
 //add question btn
 document.getElementById('add-question-btn').addEventListener('click', () => {
-  document.getElementById('q-form').classList.add("active");
+  form.classList.add("active");
   renderFormCat();
 });
 
 //add question form
-document.getElementById("q-form").addEventListener("click", async (e) => {
+form.addEventListener("click", async (e) => {
+  e.preventDefault();
   if (e.target.id === "btn-cancel") {
     e.currentTarget.classList.remove("active");
+    form.reset();
     return;
   }
   if (e.target.id === "btn-add") {
@@ -571,13 +632,13 @@ document.getElementById("q-form").addEventListener("click", async (e) => {
     console.log(q);
 
     if (!q) return;
+
     const res = await Api.addQuestion(q);
     getAdminQuestions()
       .then(() => { loadAdminQuestions(); filterRows(); });
 
 
-
-
+    form.reset();
     return;
   }
 
