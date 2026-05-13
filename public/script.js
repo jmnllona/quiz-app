@@ -1,8 +1,5 @@
 import Api from "./service/ApiCall.js";
 
-
-const adminPassword = "jerald";
-
 let state = {
   categories: [],
   selectedCategory: null,
@@ -27,7 +24,7 @@ function switchScreenTo(screenName) {
 
   let screen = document.getElementById(id);
   if (screen) {
-    if (id === "admin-screen") document.getElementById("header").style.backgroundColor = "#4b4b51";
+    if (id === "admin-screen") document.getElementById("header").style.backgroundColor = "var(--darkgreylight)";
     else document.getElementById("header").style.backgroundColor = "#7a87a0;";
 
     screen.classList.add("active");
@@ -350,7 +347,7 @@ function renderQuestions(questions) {
   let tbody = document.getElementById("question-tbody");
 
   if (questions.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#8b8b8b; padding: 30px;">no questions found</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#8b8b8b; padding: 30px;">no questions found</td></tr>`;
     return;
   }
 
@@ -372,6 +369,7 @@ function renderQuestions(questions) {
           </div>`;
     }).join("")}</div>
       </td>
+      <td><button class="action-btn">...</button></td>
     </tr>`;
   }).join("");
 }
@@ -380,7 +378,7 @@ function filterRows() {
   const cat = document.getElementById('cat-filter').value;
   const diff = document.getElementById('diff-filter').value;
 
-  const filtered = state.questions.filter(q => {
+  const filtered = state.admin_questions.filter(q => {
     return (!cat || q.category_id == cat) && (!diff || q.difficulty === diff);
   });
 
@@ -443,7 +441,7 @@ function checkIsFormValid() {
   };
 }
 
-function loadAdminCategories(categories) {
+function loadAdminCategories() {
   renderAdminCategories(state.admin_categories);
 }
 
@@ -452,12 +450,12 @@ function renderAdminCategories(categories) {
   let cbody = document.getElementById("admin-cat-wrapper");
 
   if (categories.length === 0) {
-    cbody.innerHTML = `<div class="admin-cat-card">no category yet</div>`; return;
+    cbody.innerHTML = `<div class="admin-cat-card empty-card">no category yett</div>`; return;
   }
 
 
   const data = [
-    { id: 1, img: "./img/cat/card img/math.webp", des: "math is the easiest subject fr" },
+    { id: 1, img: "./img/cat/card img/math.webp", des: "mathh is the easiest subject frfr" },
     { id: 2, img: "./img/cat/card img/science.webp", des: "science is the....." },
     { id: 3, img: "./img/cat/card img/astronomy.webp", des: "ill go to the other planet" },
     { id: 4, img: "./img/cat/card img/geography.webp" },
@@ -483,7 +481,7 @@ function renderAdminCategories(categories) {
  
   <p style=" overflow: hidden;
             text-overflow: ellipsis;white-space: nowrap">${des} sdfjsdjf slkdfjskjdf lsdjfsj</p>
-  <p style="color: #ceff79" ><span>${count}</span> questions</p>
+  <p style="color: var(--highlightgreen)" ><span>${count}</span> questions</p>
    </div>
 </div>`;
 
@@ -616,6 +614,9 @@ const form = document.getElementById('q-form');
 document.getElementById('add-question-btn').addEventListener('click', () => {
   form.classList.add("active");
   renderFormCat();
+  setTimeout(() => {
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 8);
 });
 
 //add question form
