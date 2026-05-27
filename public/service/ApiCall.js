@@ -3,21 +3,21 @@
 const err = {
   message: `<div class="error-state" style="margin:auto;">
     <h3>⚠️ Could not get categories</h3>
-    <p>Make sure your backend is running at <code>$CONFIG.BASE_URL}</code></p>
-    <br><button class="btn retry" >Retry</button>
-  </div>` ,
+   </div>` ,
   message2: `<div class="error-state" style="margin:auto;">
     <h3>⚠️ Could not get questions</h3>
-    <p>Make sure your backend is running at <code>$CONFIG.BASE_URL}</code></p>
-    <br><button class="btn retry" >Retry</button>
-  </div>`,
+   </div>`,
   addErr: `<div class="error-state" style="margin:auto;">
     <h3>⚠️ Could not add question</h3>
-    <p>Make sure your backend is running at <code>$CONFIG.BASE_URL}</code></p>
-    <br><button class="btn retry" >Retry</button>
-  </div>`
+    </div>`,
 
+  delErr: `<div class="error-state" style="margin:auto;">
+    <h3>⚠️ Could not delete questions</h3>
+     </div>`,
 
+  editErr: `<div class="error-state" style="margin:auto;">
+    <h3>⚠️ Could not update questions</h3>
+     </div>`,
 
 }
 
@@ -94,17 +94,14 @@ const getQuestions = async (catId, difficulty) => {
 
 
     if (!res.ok) {
+      console.log(res.status)
       return {
         success: false,
         message: data.message
       };
     }
 
-    return {
-      success: true,
-      message: data.message,
-      data: data.data
-    }
+    return data;
 
   } catch (e) {
     return {
@@ -177,6 +174,7 @@ const verifyPassword = async (p) => {
 
 
   } catch (e) {
+
     return {
       success: false,
       message: err.message2,
@@ -187,5 +185,64 @@ const verifyPassword = async (p) => {
 
 }
 
+const deleteQuestion = async (id) => {
 
-export default { getCategories, updateCategoryName, getQuestions, getAllQuestions, verifyPassword, addQuestion };
+  try {
+    const res = await fetch(`/questions/${id}`, {
+      method: "DELETE"
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      return {
+        success: false,
+        message: data.message
+      };
+    }
+    return data;
+
+  } catch (e) {
+
+    console.error(`Make sure your backend is running at ${CONFIG.BASE_URL}`, e);
+
+    return {
+      success: false,
+      message: err.delErr,
+    }
+
+  }
+}
+
+
+const updateQuestion = async (field, id) => {
+  try {
+    const res = await fetch(`/questions/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(field),
+
+    });
+
+    const data = await res.json();
+    return data;
+  }
+
+  catch (e) {
+
+    return {
+      success: false,
+      message: err.editErr,
+    }
+  }
+}
+export default {
+  getCategories,
+  updateCategoryName,
+  getQuestions,
+  getAllQuestions,
+  verifyPassword,
+  addQuestion,
+  deleteQuestion,
+  updateQuestion,
+};

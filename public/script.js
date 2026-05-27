@@ -311,13 +311,13 @@ async function getAdminQuestions() {
   const res = await Api.getAllQuestions();
 
   if (!res.success) {
-    console.log(res.success, res.message);
+    console.log("success: ", res.success, res.message);
     return;
   }
 
-  console.log(res.success, res.message);
+  console.log("success:", res.success, res.message);
   state.admin_questions = res.data;
-  console.log(state.admin_questions);
+
 }
 
 /** Fetches all categories and stores them in state */
@@ -357,7 +357,7 @@ function renderQuestions(questions) {
     return;
   }
 
-  tbody.innerHTML = questions.map(q => {
+  tbody.innerHTML = questions.map((q, index) => {
     const cat = (state.admin_categories.find(c => c.id === q.category_id)?.name ?? "unknown")
       .toLowerCase()
       .replaceAll(" ", "-");
@@ -365,8 +365,10 @@ function renderQuestions(questions) {
     const optionsHTML = q.options.map((opt, i) => {
       const isCorrect = opt === q.answer;
       return `<div class="opt ${isCorrect ? "correct" : ""}">
-        <span class="opt-letter">${letterArr[i]}</span>
-        <span>${opt} ${isCorrect ? "🗸" : ""}</span>
+      <input class="radio"  style="display:none" type="radio" name="opt_radio">
+        <span class="opt-letter" style="display: flex" >${letterArr[i]}</span>
+        <input class=opt-text value="${opt}" disabled>
+        <span class ="opt-checkmark">${isCorrect ? "🗸" : ""}</span>
       </div>`;
     }).join("");
 
@@ -375,13 +377,14 @@ function renderQuestions(questions) {
       <td><span class="badge cat-${cat}">${cat}</span></td>
       <td><span class="badge diff-${q.difficulty}">${q.difficulty}</span></td>
       <td>${q.options.length} choices</td>
-      <td>
-        <div class="question-text">${q.question}</div>
+      <td class="td5" >
+        <input class="question-text" value="${q.question}" disabled>
         <div class="opt-list">${optionsHTML}</div>
       </td>
       <td>
         <div style="position: relative; display: inline-block;" class="action-wrapper">
-          <button class="action-btn" aria-label="actions">...</button>
+          <button class="action-btn"  aria-label="actions">...</button>
+          <button class="save-btn" style="display: none" >save</button>
           <div class="action-popup" style="display: none">
             <div class="tip-wrap">
               <button class="edit-btn" aria-label="edit"><i class="ti ti-edit"></i></button>
@@ -423,8 +426,10 @@ checkbox.addEventListener("change", (e) => {
 
 function confirmDel() {
 
+  checkbox.checked = false;
+  confirmBtn.disabled = true;
 
-  return promise = new Promise((resolve) => {
+  return new Promise((resolve) => {
 
     confirmPopup.showModal();
 
@@ -432,7 +437,51 @@ function confirmDel() {
     cancelBtn.onclick = () => { confirmPopup.close(); resolve(false); };
 
   });
+}
 
+async function save(e) {
+
+  const tr = e.target.closest("tr");
+  const td = tr.querySelector(".td5");
+
+
+  //check if correct answer is selected
+  const checked = td.querySelector(`input[name="opt_radio"]:checked`);
+
+  if (!checked) {
+    console.log("please choose correct answer.\n");
+  }
+  else {
+    const optField = checked.closest(".opt");
+    //change css for highlighting correct answer 
+    td.querySelector(".opt.correct").classList.remove("correct");
+    optField.classList.add("correct");
+    td.querySelectorAll(".opt-checkmark").forEach(s => s.textContent = "");
+    optField.querySelector(".opt-checkmark").textContent = "🗸";
+
+    //get and save data
+    const fields = {
+      question: td.querySelector(".question-text").value.trim(),
+      options: Array.from(td.querySelectorAll(".opt-text")).map(opt => opt.value.trim()),
+      answer: optField.querySelector(".opt-text").value.trim(),
+    };
+    //get question id 
+    const id = tr.querySelector(".id").dataset.id;
+    console.log(id);
+
+    const res = await Api.updateQuestion(fields, id);
+    if (!res.success) { console.log(res.message) }
+
+    tbody.querySelectorAll(".action-btn").forEach(a => a.style.display = "flex");
+    tbody.querySelectorAll(".save-btn").forEach(s => s.style.display = "none");
+
+
+    tbody.querySelectorAll("input").forEach(i => i.disabled = true);
+    tbody.querySelectorAll(".radio").forEach(r => r.style.display = "none");
+    tbody.querySelectorAll(".opt-letter").forEach(l => l.style.display = "flex");
+
+    console.log(res.message);
+  }
 
 }
 
@@ -590,6 +639,15 @@ function switchTab() {
 // ══════════════════════════════════════════════════════════════════════════════════
 //                   HELPERS
 // ══════════════════════════════════════════════════════════════════════════════════
+
+function refreshAdminQuestions() {
+  getAdminQuestions()
+    .then(() => { filterRows(); });
+
+}
+
+
+
 
 /**
  * Shrinks the question text font-size until it fits inside the card.
@@ -774,12 +832,12 @@ form.addEventListener("click", async (e) => {
     return;
   }
 
-  if (e.target.closest("#btn-clearForm")) {
+  if (e.target.closest("#q-form-btn-clearForm")) {
     form.reset();
 
   }
 
-  if (e.target.id === "btn-add") {
+  if (e.target.id === "q-form-btn-add") {
     const q = checkIsFormValid();
     console.log(q);
     if (!q) return;
@@ -787,9 +845,7 @@ form.addEventListener("click", async (e) => {
     await Api.addQuestion(q);
 
     // Refresh the questions table
-    getAdminQuestions()
-      .then(() => { loadAdminQuestions(); filterRows(); });
-
+    refreshAdminQuestions();
     form.reset();
   }
 });
@@ -798,7 +854,7 @@ form.addEventListener("click", async (e) => {
 
 const tbody = document.getElementById('question-tbody');
 
-tbody.addEventListener('click', e => {
+tbody.addEventListener('click', async e => {
 
   // Toggle the action popup (edit/remove buttons)
   if (e.target.closest('.action-btn')) {
@@ -806,28 +862,46 @@ tbody.addEventListener('click', e => {
     popup.style.display = popup.style.display === "none" ? 'flex' : 'none';
   }
 
-  // BUG FIX: removed the extra .querySelector('td') — not needed, querySelector
-  // already searches all descendants of the <tr>
   if (e.target.closest('.remove-btn')) {
-    const id = e.target.closest('tr').querySelector('.id').dataset.id;
+    const id = Number(e.target.closest('tr').querySelector('.id').dataset.id);
     if (!id) return;
 
-    confirmDel().then((confirmed) => {
+    confirmDel().then(async (confirmed) => {
+
       if (confirmed) {
-        const res = Api.deleteQuestion(id);
-        const message = res.message;
+
+        const res = await Api.deleteQuestion(id);
+        refreshAdminQuestions();
+        console.log("success: ", res.success, res.message);
+
+
       }
-
     })
-
-
-
-
-
   }
 
+  if (e.target.closest(".edit-btn")) {
+    tbody.querySelectorAll(".action-btn").forEach(a => a.style.display = "flex");
+    tbody.querySelectorAll(".save-btn").forEach(s => s.style.display = "none");
 
+    e.target.closest("td").querySelector(".save-btn").style.display = "flex";
+    e.target.closest(".action-popup").style.display = "none";
+    e.target.closest("td").querySelector(".action-btn").style.display = "none";
 
+    tbody.querySelectorAll("input").forEach(i => i.disabled = true);
+    tbody.querySelectorAll(".radio").forEach(r => r.style.display = "none");
+    tbody.querySelectorAll(".opt-letter").forEach(l => l.style.display = "flex");
+
+    const td = e.target.closest("tr").querySelector(".td5");
+    td.querySelectorAll("input").forEach(i => i.disabled = !i.disabled)
+    td.querySelectorAll(".radio").forEach(r => r.style.display = "flex");
+    td.querySelectorAll(".opt-letter").forEach(r => r.style.display = "none");
+  }
+
+  if (e.target.closest(".save-btn")) {
+
+    save(e);
+
+  }
 });
 
 // ── Admin — tooltip hover ─────────────────────────────────────────────────────────
@@ -850,4 +924,39 @@ tbody.addEventListener('mouseout', e => {
       e.target.style.display = "none";
     }
   }
+
+  if (e.target.classList.contains("td5")) {
+
+
+
+  }
+
+
+
 });
+
+tbody.addEventListener('change', async (e) => {
+
+  const tr = e.target.closest("tr");
+  const td = tr.querySelector(".td5");
+
+
+  //check if correct answer is selected
+  const checked = td.querySelector(`input[name="opt_radio"]:checked`);
+
+  if (checked) {
+
+    const optField = checked.closest(".opt");
+    //change css for highlighting correct answer 
+    td.querySelector(".opt.correct").classList.remove("correct");
+    optField.classList.add("correct");
+    td.querySelectorAll(".opt-checkmark").forEach(s => s.textContent = "");
+    optField.querySelector(".opt-checkmark").textContent = "🗸";
+
+
+
+  }
+
+});
+
+

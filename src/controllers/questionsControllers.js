@@ -9,12 +9,11 @@ const Err = {
   emptyErr: `<div class="error-state">
              <h3>🔍 No Questions Found</h3>
              <p>There are no questions for this category yet.</p>
-             <br><button class="btn goCat">Try Different Category </button>
+             <br><button class="btn btn--primary size--long goCat">Try Different Category </button>
              </div>`,
   emptyTableErr: `<div class="error-state">
              <h3>🔍 No Questions Found</h3>
              <p>There are no questions yet.</p>
-             <br><button class="btn goCat">Try Different Category </button>
              </div>`,
   notFounErr: (id) =>
     `<div class="error-state">
@@ -49,6 +48,7 @@ const addQuestion = async (req, res) => {
 const updateQuestion = async (req, res) => {
   try {
     const id = req.params.id;
+    console.log(id);
     const { question, options, answer } = req.body;
 
     const result = await db.query(
@@ -135,7 +135,7 @@ const getQuestions = async (req, res) => {
 const getAllQuestions = async (req, res) => {
   try {
 
-    const result = await db.query(`SELECT * FROM questions`);
+    const result = await db.query(`SELECT * FROM questions ORDER BY id ASC`);
 
     if (result.rows.length == 0) {
       return res.status(404).json({

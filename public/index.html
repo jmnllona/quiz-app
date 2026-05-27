@@ -6,10 +6,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
 
     <style>
-        /* ════════════════════════════════════════════════════════
-           RESET
-           ════════════════════════════════════════════════════════ */
-
         *,
         *::before,
         *::after {
@@ -17,10 +13,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
-        /* ════════════════════════════════════════════════════════
-           VARIABLES
-           ════════════════════════════════════════════════════════ */
 
         :root {
             --white: white;
@@ -35,7 +27,7 @@
             --greylight: #8b8b8b;
             --light-grey: rgb(224, 226, 233);
             --muted: #7a87a0;
-            --accent: #7c6af7;
+            --purple: rgb(142, 134, 255);
             --accent-dim: rgba(124, 106, 247, 0.15);
             --accent2: #ff6b6b;
             --accent3: #54d9a8;
@@ -52,10 +44,6 @@
             --fontdefault: 12px;
         }
 
-        /* ════════════════════════════════════════════════════════
-           BASE
-           ════════════════════════════════════════════════════════ */
-
         html {
             scroll-behavior: smooth;
             overflow-y: scroll;
@@ -66,16 +54,13 @@
             overflow-x: hidden;
             scrollbar-width: none;
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
         }
 
         input[type="password"]::-ms-reveal,
         input[type="password"]::-webkit-credentials-auto-fill-button {
             display: none;
         }
-
-        /* ════════════════════════════════════════════════════════
-           ANIMATIONS
-           ════════════════════════════════════════════════════════ */
 
         @keyframes fadeUp {
             0% {
@@ -101,13 +86,6 @@
             }
         }
 
-        /* ════════════════════════════════════════════════════════
-           SHARED / REUSABLE
-           ════════════════════════════════════════════════════════ */
-
-
-
-
         .screen {
             display: none;
             max-width: 70%;
@@ -120,8 +98,6 @@
             display: flex;
             animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
-
 
         .btn {
             border: none;
@@ -143,7 +119,7 @@
         }
 
         .btn--secondary {
-            background: var(--accent);
+            background: var(--purple);
             color: var(--white);
         }
 
@@ -162,7 +138,6 @@
             min-width: 60px;
             height: 20px;
             padding: 0 6px;
-
         }
 
         .size--md {
@@ -170,27 +145,29 @@
             min-width: 90px;
             height: 30px;
             padding: 0 10px;
-
         }
 
         .size--long {
             width: 200px;
+            min-width: 90px;
+            height: 30px;
+            padding: 0 10px;
         }
 
         .select {
             background-color: var(--darkgreylight);
             border-radius: 8px;
             color: white;
-
+            border: none;
         }
 
         .back {
             width: 40px;
             height: 40px;
-            background-color: var(--muted);
+            background-color: var(--darkgreylight);
             outline: none;
             color: white;
-            border-radius: 0px;
+            border-radius: 8px;
             font-weight: 600;
         }
 
@@ -207,10 +184,6 @@
             background-color: #57575b;
         }
 
-        /* ════════════════════════════════════════════════════════
-           HEADER
-           ════════════════════════════════════════════════════════ */
-
         #header {
             width: 100%;
             height: 60px;
@@ -218,13 +191,9 @@
             align-items: center;
             padding: 10px 15px;
             position: fixed;
-            background-color: var(--muted);
+            background-color: var(--darkgreylight);
             z-index: 999;
         }
-
-        /* ════════════════════════════════════════════════════════
-           SCREEN: HOME
-           ════════════════════════════════════════════════════════ */
 
         #home-screen {
             flex-direction: column;
@@ -240,10 +209,6 @@
             gap: 30px;
             margin-top: 100px;
         }
-
-        /* ════════════════════════════════════════════════════════
-           SCREEN: CATEGORY
-           ════════════════════════════════════════════════════════ */
 
         #category-screen {
             flex-direction: column;
@@ -263,7 +228,7 @@
             position: absolute;
             top: 0px;
             padding-bottom: 30px;
-            background-color: white;
+            background-color: transparent;
         }
 
         .search-icon {
@@ -279,7 +244,7 @@
             border: none;
             outline: none;
             border-radius: 5px;
-            background-color: var(--muted);
+            background-color: var(--darkgreylight);
             padding-left: 35px;
             color: white;
         }
@@ -308,12 +273,13 @@
         .category-card-btn {
             width: 90%;
             height: auto;
-            background-color: white;
-            border-radius: 0px;
+            background-color: transparent;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             padding: 20px;
-            border: solid 1px var(--muted);
+            color: var(--black);
+            border: solid 1px var(--darkgreylight);
             gap: 20px;
         }
 
@@ -321,10 +287,6 @@
             border-color: #b1bbcc;
             color: #b1bbcc;
         }
-
-        /* ════════════════════════════════════════════════════════
-           SCREEN: QUIZ
-           ════════════════════════════════════════════════════════ */
 
         #quiz-screen {
             flex-direction: column;
@@ -352,7 +314,6 @@
             flex: 1;
         }
 
-        /* timer */
         .timer-container {
             width: 50px;
             height: 50px;
@@ -378,9 +339,7 @@
             stroke-linecap: square;
             stroke-dasharray: 126;
             stroke-dashoffset: 0;
-            transition:
-                stroke-dashoffset 1s linear,
-                stroke 0.3s;
+            transition: stroke-dashoffset 1s linear, stroke 0.3s;
         }
 
         .timer-progress.warning {
@@ -401,7 +360,6 @@
             color: #333;
         }
 
-        /* question card */
         .question-card {
             width: 100%;
             height: fit-content;
@@ -424,7 +382,6 @@
             word-break: break-word;
         }
 
-        /* options */
         .opt-grid {
             width: 100%;
             height: fit-content;
@@ -438,7 +395,7 @@
             width: 100%;
             max-width: 100%;
             background-color: white;
-            border: solid 1px var(--muted);
+            border: solid 1px var(--darkgreylight);
             color: black;
         }
 
@@ -446,10 +403,6 @@
             border-color: #9ba7bc;
             background-color: white;
         }
-
-        /* ════════════════════════════════════════════════════════
-           SCREEN: RESULT
-           ════════════════════════════════════════════════════════ */
 
         #result-screen {
             flex-direction: column;
@@ -505,18 +458,14 @@
             justify-content: center;
         }
 
-        /* ════════════════════════════════════════════════════════
-           ADMIN LOGIN MODAL
-           ════════════════════════════════════════════════════════ */
-
         #open-modal-btn {
             width: 100px;
             height: 30px;
             background-color: white;
             border: none;
             outline: none;
-            color: var(--muted);
-            border-radius: 0px;
+            color: var(--darkgreylight);
+            border-radius: 8px;
             font-weight: 600;
             margin-left: auto;
         }
@@ -527,7 +476,7 @@
             padding: 20px;
             margin: auto;
             background-color: white;
-            border: solid 1px var(--muted);
+            border: solid 1px var(--darkgreylight);
             gap: 30px;
         }
 
@@ -550,7 +499,7 @@
             width: 30%;
             height: 30px;
             border: none;
-            background-color: var(--muted);
+            background-color: var(--darkgreylight);
             color: white;
         }
 
@@ -566,7 +515,7 @@
         #admin-pass-input {
             width: 100%;
             height: 25px;
-            border: solid 1px var(--muted);
+            border: solid 1px var(--darkgreylight);
             outline: none;
             padding-left: 10px;
         }
@@ -598,16 +547,12 @@
         }
 
         .eye-open {
-            color: var(--muted);
+            color: var(--darkgreylight);
         }
 
         .eye-close {
             color: #9da9bf;
         }
-
-        /* ════════════════════════════════════════════════════════
-           SCREEN: ADMIN
-           ════════════════════════════════════════════════════════ */
 
         #admin-screen {
             max-width: 180vh;
@@ -633,15 +578,14 @@
             margin-left: auto;
         }
 
-        /* admin nav tabs */
         #admin-nav {
             width: fit-content;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
-            border: solid 1px var(--muted);
-            border-radius: 10px;
+            border: solid 1px var(--greylight);
+            border-radius: 8px;
             margin-bottom: 20px;
         }
 
@@ -650,7 +594,7 @@
             height: 30px;
             border: none;
             background-color: transparent;
-            color: var(--muted);
+            color: var(--darkgreylight);
             border-radius: 7px;
             transition: background-color 0.2s;
         }
@@ -660,7 +604,6 @@
             color: white;
         }
 
-        /* tab panels */
         .tab-panel {
             display: none;
         }
@@ -668,10 +611,6 @@
         .tab-panel.active {
             display: flex;
         }
-
-        /* ════════════════════════════════════════════════════════
-           ADMIN TAB: QUESTIONS
-           ════════════════════════════════════════════════════════ */
 
         #question-tab {
             flex-direction: row;
@@ -686,7 +625,6 @@
             transition: transform 0.3s ease;
         }
 
-        /* left side */
         #question-main {
             display: flex;
             flex-direction: column;
@@ -698,9 +636,6 @@
 
         #add-question-btn {
             display: none;
-            /* background: linear-gradient(to right,
-                    var(--addbtn),
-                    var(--highlightgreen)); */
             margin-left: auto;
             position: relative;
         }
@@ -722,9 +657,7 @@
             white-space: nowrap;
             opacity: 0;
             pointer-events: none;
-            transition:
-                opacity 0.3s ease,
-                transform 0.3s ease;
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .add-btn:hover .tooltip-fade {
@@ -732,12 +665,11 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* question table */
         #table-wrapper {
             max-height: 74.2vh;
             overflow-y: auto;
             scrollbar-width: none;
-            border-radius: 10px;
+            border-radius: 8px;
         }
 
         #question-table {
@@ -792,8 +724,18 @@
             background: rgb(99, 99, 103);
         }
 
-        /* table content */
+
+        #question-table td input {
+            background-color: transparent;
+
+            border: none;
+            color: var(--light-grey);
+
+        }
+
+
         .question-text {
+
             color: white;
             margin-bottom: 10px;
         }
@@ -808,9 +750,11 @@
             display: flex;
             gap: 10px;
             margin-left: 5px;
+
         }
 
-        .opt.correct {
+        .opt.correct,
+        #question-table .opt.correct input {
             color: var(--highlightgreen);
         }
 
@@ -835,15 +779,11 @@
             flex-direction: column;
             display: none;
             position: absolute;
-            /* bottom: calc(100% + 8px); */
             left: 50%;
             top: 30;
             transform: translateX(-50%);
-            /* background: var(--darkgreylight); */
-            /* border: solid 1px var(--greylight); */
             border-radius: 8px;
             padding: 10px 10px 10px 10px;
-            /* flex-direction: row; */
             gap: 4px;
             z-index: 99;
         }
@@ -905,7 +845,6 @@
             background: rgba(247, 106, 106, 0.15);
         }
 
-        /* category badges */
         .cat-math {
             background-color: rgb(223, 239, 217);
             color: #284e22;
@@ -931,7 +870,6 @@
             color: #43591c;
         }
 
-        /* difficulty badges */
         .diff-easy {
             background-color: rgb(201, 222, 192);
             color: #3d6438;
@@ -946,10 +884,6 @@
             background-color: rgb(220, 197, 198);
             color: #533030;
         }
-
-        /* ════════════════════════════════════════════════════════
-           ADMIN TAB: QUESTIONS — Confirm Modal
-           ════════════════════════════════════════════════════════ */
 
         #confirm-del-popup {
             width: 300px;
@@ -968,7 +902,6 @@
             font-weight: 500;
         }
 
-
         #confirm-del-popup label {
             display: flex;
             font-size: 12px;
@@ -978,25 +911,16 @@
 
         #confirm-del-checkbox {
             font-size: 12px;
-
         }
 
         #confirm-del-confirm-btn[disabled] {
-
             opacity: 0.5;
             cursor: not-allowed;
         }
 
         #confirm-del-popup::backdrop {
-            /* backdrop-filter: blur(4px); */
             background-color: rgba(0, 0, 0, 0.5);
-
         }
-
-
-        /* ════════════════════════════════════════════════════════
-           ADMIN TAB: QUESTIONS — FORM
-           ════════════════════════════════════════════════════════ */
 
         #q-form {
             width: 0;
@@ -1010,9 +934,7 @@
             border-radius: 10px;
             margin: 0;
             padding: 0;
-            transition:
-                width 0.3s cubic-bezier(0.075, 0.82, 0.165, 1),
-                opacity 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+            transition: width 0.3s cubic-bezier(0.075, 0.82, 0.165, 1), opacity 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
         }
 
         #q-form.active {
@@ -1022,7 +944,6 @@
             margin-top: 40px;
         }
 
-        /* form header */
         .form-header {
             display: flex;
             align-items: center;
@@ -1053,7 +974,6 @@
             letter-spacing: -0.02em;
         }
 
-        /* form fields */
         .field-group {
             display: flex;
             flex-direction: column;
@@ -1112,7 +1032,6 @@
             border: solid 1px var(--greylight);
         }
 
-        /* options grid */
         .options-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1159,7 +1078,6 @@
             flex-shrink: 0;
         }
 
-        /* bottom row */
         .bottom-row {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1168,7 +1086,6 @@
             margin-top: 30px;
         }
 
-        /* form actions */
         .actions {
             display: flex;
             justify-content: space-between;
@@ -1180,10 +1097,7 @@
         #q-form .btn {
             width: auto;
             font-family: "DM Sans", sans-serif;
-            transition:
-                opacity 0.15s,
-                transform 0.1s,
-                box-shadow 0.15s;
+            transition: opacity 0.15s, transform 0.1s, box-shadow 0.15s;
             padding: 5px 20px;
         }
 
@@ -1203,17 +1117,12 @@
             opacity: 0.7;
         }
 
-        #q-form-btn-clearForm:hover {
-            opacity: 0.9;
-            box-shadow: 4px 4px 3px rgba(68, 68, 68, 0.3);
-        }
-
+        #q-form-btn-clearForm:hover,
         #q-form-btn-add:hover {
             opacity: 0.9;
             box-shadow: 4px 4px 3px rgba(68, 68, 68, 0.3);
         }
 
-        /* form errors */
         .form-err {
             color: red;
             display: none;
@@ -1247,10 +1156,6 @@
         .form-err.diff-err {
             left: 80px;
         }
-
-        /* ════════════════════════════════════════════════════════
-           ADMIN TAB: CATEGORIES
-           ════════════════════════════════════════════════════════ */
 
         #category-tab {
             flex-direction: column;
@@ -1314,10 +1219,6 @@
             margin-top: 150px;
         }
 
-        /* ════════════════════════════════════════════════════════
-           MEDIA QUERIES
-           ════════════════════════════════════════════════════════ */
-
         @media (max-width: 480px) {
             .opt-grid {
                 grid-template-columns: 1fr;
@@ -1354,20 +1255,14 @@
         <button id="open-modal-btn">admin</button>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════
-         SCREEN: HOME
-         ════════════════════════════════════════════════════════ -->
     <div class="screen active" id="home-screen">
         <h2>Test your Knowledge</h2>
         <div class="btn-container-home">
-            <button class="btn play">play</button>
-            <button class="btn">hi po</button>
+            <button class="btn btn--secondary size--long play">play</button>
+            <button class="btn btn--primary size--long">hi po</button>
         </div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════
-         SCREEN: CATEGORY
-         ════════════════════════════════════════════════════════ -->
     <div class="screen" id="category-screen">
         <div id="category-header">
             <button class="btn back">&lt;</button>
@@ -1384,9 +1279,6 @@
         <div id="category-grid"></div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════
-         SCREEN: QUIZ
-         ════════════════════════════════════════════════════════ -->
     <div class="screen" id="quiz-screen">
         <div class="quiz-header">
             <button class="btn back">&lt;</button>
@@ -1402,27 +1294,18 @@
         <div class="question-card"></div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════
-         SCREEN: RESULT
-         ════════════════════════════════════════════════════════ -->
     <div class="screen" id="result-screen">
         <div class="result-stat-row">
             <div class="result-stat">
-                <div class="result-stat-val" id="res-mistakes" style="color: var(--wrong)">
-                    0
-                </div>
+                <div class="result-stat-val" id="res-mistakes" style="color: var(--wrong)">0</div>
                 <div class="result-stat-key">Mistakes</div>
             </div>
             <div class="result-stat center">
-                <div class="result-stat-val main-score" id="res-correct" style="color: var(--correct)">
-                    0
-                </div>
+                <div class="result-stat-val main-score" id="res-correct" style="color: var(--correct)">0</div>
                 <div class="result-stat-key">Score</div>
             </div>
             <div class="result-stat">
-                <div class="result-stat-val" id="res-accuracy" style="color: var(--accent)">
-                    0%
-                </div>
+                <div class="result-stat-val" id="res-accuracy" style="color: var(--darkgreylight)">0%</div>
                 <div class="result-stat-key">Accuracy</div>
             </div>
         </div>
@@ -1437,9 +1320,6 @@
         </div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════
-         SCREEN: ADMIN
-         ════════════════════════════════════════════════════════ -->
     <div class="screen active" id="admin-screen">
         <div id="admin-header">
             <h1>Work Space</h1>
@@ -1452,14 +1332,11 @@
             <button class="admin-tab" data-tab="settings">settings</button>
         </div>
 
-        <!-- ── TAB: QUESTIONS ───────────────────────────────── -->
         <div class="tab-panel active" id="question-tab">
-            <!-- left: filters + table -->
             <div id="question-main">
                 <h1>Questions</h1>
-
                 <div class="wrapper">
-                    <select class="select size--md " id="cat-filter">
+                    <select class="select size--md" id="cat-filter">
                         <option value="">All categories</option>
                     </select>
                     <select class="select size--md" id="diff-filter">
@@ -1499,7 +1376,6 @@
                 </div>
             </div>
 
-            <!-- right: form slides in -->
             <form id="q-form">
                 <div class="form-header">
                     <div class="icon">
@@ -1514,9 +1390,7 @@
                     <button id="q-form-cancel-btn" type="button">X</button>
                 </div>
 
-                <p class="form-err" id="form-err-text">
-                    * Field with asterisk(*) is required
-                </p>
+                <p class="form-err" id="form-err-text">* Field with asterisk(*) is required</p>
 
                 <div class="field-group" style="margin-top: 20px">
                     <label>Question</label>
@@ -1584,22 +1458,17 @@
                 </div>
 
                 <div class="actions">
-                    <button class="btn btn--danger size--md" id="q-form-btn-clearForm" type="button">
-                        Clear Form
-                    </button>
-                    <button class="btn btn--secondary size-md" id="q-form-btn-add" type="submit">
-                        Add Question
-                    </button>
+                    <button class="btn btn--danger size--md" id="q-form-btn-clearForm" type="button">Clear Form</button>
+                    <button class="btn btn--secondary size-md" id="q-form-btn-add" type="submit">Add Question</button>
                 </div>
             </form>
         </div>
 
-        <!-- ── TAB: CATEGORIES ─────────────────────────────── -->
         <div class="tab-panel" id="category-tab">
             <div class="field-group">
                 <div class="wrapper">
                     <h1>Categories</h1>
-                    <button class="des1" id="add-category-btn">+ add Category</button>
+                    <button class="btn btn--secondary size--md" id="add-category-btn">+ add Category</button>
                 </div>
                 <div id="admin-cat-wrapper">
                     <div class="admin-cat-card empty-card">no category yet</div>
@@ -1607,13 +1476,9 @@
             </div>
         </div>
 
-        <!-- ── TAB: SETTINGS ───────────────────────────────── -->
         <div class="tab-panel" id="settings-tab"></div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════
-         ADMIN LOGIN MODAL
-         ════════════════════════════════════════════════════════ -->
     <dialog id="admin-modal">
         <button id="admin-modal-close-btn">X</button>
         <h1>Login</h1>
@@ -1633,19 +1498,12 @@
         <button id="admin-login-btn">LOGIN</button>
     </dialog>
 
-    <!-- ════════════════════════════════════════════════════════
-        Confirm Delete Modal
-         ════════════════════════════════════════════════════════ -->
     <dialog id="confirm-del-popup">
         <p>Are you sure to delete this question?</p>
         <label><input type="checkbox" id="confirm-del-checkbox" /> confirm</label>
         <div class="wrapper" style="justify-content: space-between;">
-            <button class="btn btn--danger size--sm" id="confirm-del-cancel-btn">
-                cancel
-            </button>
-            <button class="btn btn--secondary size--sm" id="confirm-del-confirm-btn" disabled>
-                delete
-            </button>
+            <button class="btn btn--danger size--sm" id="confirm-del-cancel-btn">cancel</button>
+            <button class="btn btn--secondary size--sm" id="confirm-del-confirm-btn" disabled>delete</button>
         </div>
     </dialog>
 
