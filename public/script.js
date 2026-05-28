@@ -25,6 +25,9 @@ let state = {
 //                   SCREEN NAVIGATION
 // ══════════════════════════════════════════════════════════════════════════════════
 
+showToast("They call me a hero, because i saved my nation from falling apart", "toast-success")
+
+
 /** Hides all screens and shows the one matching `screenName` */
 function switchScreenTo(screenName) {
   document.querySelectorAll(".screen").forEach((s) => {
@@ -280,6 +283,8 @@ async function verifyPassword() {
 
   if (res.success) {
     state.adminLoggedIn = true;
+    document.getElementById("admin-btn").style.display = "none";
+    document.getElementById("logout-btn").style.display = "inline-block";
     modal.close();
     switchScreenTo("admin");
 
@@ -291,6 +296,8 @@ async function verifyPassword() {
         loadAdminQuestions();
         loadAdminCategories();
       });
+
+
 
     return;
   }
@@ -330,7 +337,7 @@ async function getAdminCategories() {
   }
 
   state.admin_categories = res.data;
-  console.log(state.admin_categories);
+  showToast(res.message, "toast-warning");
 }
 
 // ══════════════════════════════════════════════════════════════════════════════════
@@ -646,9 +653,6 @@ function refreshAdminQuestions() {
 
 }
 
-
-
-
 /**
  * Shrinks the question text font-size until it fits inside the card.
  * Guards against .q-text not existing yet (e.g. on initial page load).
@@ -668,6 +672,34 @@ function adjustFont() {
     text.style.fontSize = fontSize + "px";
   }
 }
+
+
+function showToast(toastString = "Hello", accent) {
+
+  const toast = document.getElementById("toast");
+
+
+  toast.classList.add(`${accent}`);
+  toast.classList.add("active");
+  toast.textContent = toastString;
+
+
+  setTimeout(() => {
+
+    toast.classList.remove("active");
+    setTimeout(() => {
+      toast.classList.remove(`${accent}`);
+
+    }, 300); // wait for 0.3s transition to finish
+
+    toast.textContent = "";
+  }, 3000);
+
+
+}
+
+
+
 
 // ══════════════════════════════════════════════════════════════════════════════════
 //                   SVG ICONS
@@ -695,7 +727,15 @@ const close = `<svg class="eye-close" xmlns="http://www.w3.org/2000/svg"
 // ── Header ──────────────────────────────────────────────────────────────────────
 
 document.getElementById("header").addEventListener("click", (e) => {
-  if (e.target.id === 'open-modal-btn') verifyPassword();
+  if (e.target.id === 'admin-btn') {
+    document.getElementById("admin-modal").showModal();
+  }
+  if (e.target.id === "logout-btn") {
+    e.target.style.display = "none";
+    switchScreenTo("home");
+
+    document.getElementById("admin-btn").style.display = "inline-block";
+  }
 });
 
 // ── Home screen ─────────────────────────────────────────────────────────────────
