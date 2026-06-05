@@ -384,6 +384,7 @@ function renderQuestions(questions) {
       <td><span class="badge cat-${cat}">${cat}</span></td>
       <td><span class="badge diff-${q.difficulty}">${q.difficulty}</span></td>
       <td>${q.options.length} choices</td>
+        <td> <input class="question-text" value="${"comming soon"}" disabled></td>
       <td class="td5" >
         <input class="question-text" value="${q.question}" disabled>
         <div class="opt-list">${optionsHTML}</div>
@@ -931,8 +932,8 @@ tbody.addEventListener('click', async e => {
     tbody.querySelectorAll(".radio").forEach(r => r.style.display = "none");
     tbody.querySelectorAll(".opt-letter").forEach(l => l.style.display = "flex");
 
+    e.target.closest("tr").querySelectorAll("input").forEach(i => i.disabled = false);
     const td = e.target.closest("tr").querySelector(".td5");
-    td.querySelectorAll("input").forEach(i => i.disabled = !i.disabled)
     td.querySelectorAll(".radio").forEach(r => r.style.display = "flex");
     td.querySelectorAll(".opt-letter").forEach(r => r.style.display = "none");
   }
