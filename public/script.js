@@ -40,9 +40,9 @@ function switchScreenTo(screenName) {
   if (screen) {
     // Admin screen gets a different header color
     if (id === "admin-screen") {
-      document.getElementById("header").style.backgroundColor = "var(--darkgreylight)";
+      document.getElementById("header").style.backgroundColor = "var(--darkgrey)";
     } else {
-      document.getElementById("header").style.backgroundColor = "#7a87a0;";
+      document.getElementById("header").style.backgroundColor = "";
     }
 
     screen.classList.add("active");
